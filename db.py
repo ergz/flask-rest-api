@@ -1,0 +1,2 @@
+STORES = {}
+ITEMS = {}
