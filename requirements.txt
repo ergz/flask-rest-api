@@ -7,4 +7,5 @@ MarkupSafe==2.1.2
 Werkzeug==2.2.2
 python-dotenv
 flask-smorest
-
+sqlalchemy
+Flask-SQLAlchemy
