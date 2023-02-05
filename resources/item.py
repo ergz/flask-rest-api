@@ -1,8 +1,8 @@
-import uuid
 from flask import request
 from flask.views import MethodView
 from flask_smorest import abort, Blueprint
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from flask_jwt_extended import jwt_required
 
 from db import db
 from models import ItemModel
@@ -52,6 +52,7 @@ class ItemList(MethodView):
             ).scalars().all()
         return items
 
+    @jwt_required()
     @blp.arguments(ItemSchema)
     @blp.response(201, ItemSchema)
     def post(self, item_data):
