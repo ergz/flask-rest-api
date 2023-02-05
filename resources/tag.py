@@ -3,8 +3,8 @@ from flask.views import MethodView
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
-from models import TagModel, StoreModel
-from schemas import TagSchema
+from models import TagModel, StoreModel, ItemModel
+from schemas import TagSchema, TagAndItemSchema
 
 
 
@@ -41,3 +41,37 @@ class TagDetail(MethodView):
         tag = db.get_or_404(TagModel, tag_id)
         return tag
     
+@blp.route("/tag/<string:item_id>/tag/<string:tag_id>")
+class LinkTagsToItems(MethodView):
+
+    @blp.response(201, TagSchema)
+    def post(self, item_id, tag_id):
+        item = db.get_or_404(ItemModel, item_id)
+        tag = db.get_or_404(TagModel, tag_id)
+
+        item.tags.append(tag)
+
+        try:
+            db.session.add(item)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            abort(500, message=str(e))
+
+        return tag
+
+    @blp.response(201, TagAndItemSchema)
+    def delete(self, item_id, tag_id):
+        item = db.get_or_404(ItemModel, item_id)
+        tag = db.get_or_404(TagModel, tag_id)
+
+        item.tags.remove(tag)
+
+        try:
+            db.session.add(item)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            abort(500, message=str(e))
+
+        return {"message": "item removed from tag", "item": item, "tag": tag}
+
+
