@@ -9,8 +9,8 @@ to run this locally you will need to run the docker container and mount the
 
 here is what each of the flags above do:
 
-`-d` run in dettached
-`-p` map port from:to
-`-w` set working dir
-`-v` mount volume 
+* `-d` run in dettached
+* `-p` map port from:to
+* `-w` set working dir
+* `-v` mount volume 
 
